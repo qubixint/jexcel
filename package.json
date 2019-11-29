@@ -35,7 +35,7 @@
         "data-spreadsheet"
     ],
     "dependencies": {
-        "jsuites": "^2.2.2"
+        "jsuites": "git+https://github.com/qubixint/jsuites.git#37eaa8d"
     },
     "main": "dist/jexcel.js",
     "version": "3.6.2",
