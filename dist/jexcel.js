@@ -3294,7 +3294,7 @@ var jexcel = (function(el, options) {
             var insertBefore = insertBefore ? true : false;
 
             // Current column number
-            var lastRow = obj.options.data.length - 1;
+            var lastRow = obj.options.data.length ? obj.options.data.length - 1 : 0;
 
             if (rowNumber == undefined || rowNumber >= parseInt(lastRow) || rowNumber < 0) {
                 rowNumber = lastRow;
