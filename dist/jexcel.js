@@ -205,7 +205,6 @@ var jexcel = (function(el, options) {
     obj.corner = null;
     obj.contextMenu = null;
     obj.textarea = null;
-    obj.ads = null;
     obj.content = null;
     obj.table = null;
     obj.thead = null;
@@ -509,19 +508,6 @@ var jexcel = (function(el, options) {
             }
         });
 
-        // Powered by jExcel
-        var ads = '<a href="https://bossanova.uk/jexcel/"><img src="//bossanova.uk/jexcel/logo.png">jExcel Spreadsheet</a>';
-        obj.ads = document.createElement('div');
-        obj.ads.className = 'jexcel_about';
-        if (typeof(sessionStorage) !== "undefined") {
-            if (! sessionStorage.getItem('jexcel')) {
-                sessionStorage.setItem('jexcel', true);
-                obj.ads.innerHTML = ads;
-            }
-        } else {
-            obj.ads.innerHTML = ads;
-        }
-
         // Create table container TODO: frozen columns
         var container = document.createElement('div');
         container.classList.add('jexcel_table');
@@ -548,7 +534,6 @@ var jexcel = (function(el, options) {
         el.appendChild(obj.content);
         el.appendChild(obj.pagination);
         el.appendChild(obj.contextMenu);
-        el.appendChild(obj.ads);
         el.classList.add('jexcel_container');
 
         // Create toolbar
@@ -986,6 +971,11 @@ var jexcel = (function(el, options) {
                     td.style.overflow = 'hidden';
                 }
             }
+        }
+
+        // Add custom class
+        if (obj.options.columns[i].class) {
+            td.classList.add(obj.options.columns[i].class)
         }
 
         return td;
