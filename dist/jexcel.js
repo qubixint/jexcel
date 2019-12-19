@@ -6054,7 +6054,17 @@ var jexcel = (function(el, options) {
                         if (obj.selectedCell) {
                             navigator.clipboard.readText().then(function(text) {
                                 if (text) {
-                                    jexcel.current.paste(obj.selectedCell[0], obj.selectedCell[1], text);
+                                    var minRow = parseInt(jexcel.current.selectedCell[1]);
+                                    var maxRow = parseInt(jexcel.current.selectedCell[3]);
+                                    var minCol = parseInt(jexcel.current.selectedCell[0]);
+                                    var maxCol = parseInt(jexcel.current.selectedCell[2]);
+                                    for (var row = minRow; row <= maxRow; row++) {
+                                        for (var col = minCol; col <= maxCol; col++) {
+                                            if (jexcel.current.options.columns[col].type != 'hidden') {
+                                                jexcel.current.paste(col, row, text);
+                                            }
+                                        }
+                                    }
                                 }
                             });
                         }
@@ -7101,11 +7111,24 @@ jexcel.pasteControls = function(e) {
     if (jexcel.current && jexcel.current.selectedCell) {
         if (! jexcel.current.edition) {
             if (jexcel.current.options.editable == true) {
+                var callPaste = function(data) {
+                    var minRow = parseInt(jexcel.current.selectedCell[1]);
+                    var maxRow = parseInt(jexcel.current.selectedCell[3]);
+                    var minCol = parseInt(jexcel.current.selectedCell[0]);
+                    var maxCol = parseInt(jexcel.current.selectedCell[2]);
+                    for (var row = minRow; row <= maxRow; row++) {
+                        for (var col = minCol; col <= maxCol; col++) {
+                            if (jexcel.current.options.columns[col].type != 'hidden') {
+                                jexcel.current.paste(col, row, data);
+                            }
+                        }
+                    }
+                }
                 if (e && e.clipboardData) {
-                    jexcel.current.paste(jexcel.current.selectedCell[0], jexcel.current.selectedCell[1], e.clipboardData.getData('text'));
+                    callPaste(e.clipboardData.getData('text'));
                     e.preventDefault();
                 } else if (window.clipboardData) {
-                    jexcel.current.paste(jexcel.current.selectedCell[0], jexcel.current.selectedCell[1], window.clipboardData.getData('text'));
+                    callPaste(window.clipboardData.getData('text'));
                 }
             }
         }
