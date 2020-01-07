@@ -6430,6 +6430,60 @@ jexcel.keyDownControls = function(e) {
                     jexcel.current.right();
                 }
                 e.preventDefault();
+            //PageUp
+            } else if (e.which == 33) {
+                e.preventDefault();
+
+                var y = parseInt(jexcel.current.selectedCell[1]);
+                var displaySize = Math.floor(jexcel.current.content.offsetHeight / jexcel.current.records[jexcel.current.selectedCell[3]][jexcel.current.selectedCell[2]].offsetHeight - 1);
+
+                //find first visible row
+                var firstVisibleY = -1;
+                var tableEl = jexcel.current.content.getBoundingClientRect();
+                for (var i=(y<30 ? 0 : y-30); i<y+30; i++) {
+                    var rowEl = jexcel.current.rows[i].getBoundingClientRect();
+
+                    if (rowEl.top <= tableEl.top ? tableEl.top - rowEl.top <= rowEl.height : rowEl.bottom - tableEl.bottom <= rowEl.height) {
+                        firstVisibleY = i+1;
+                        break;
+                    }
+                }
+
+                //simulate up and down key press (currently best solution because it sets scrollbar properly)
+                for (var i=0; i<displaySize + (y-firstVisibleY) - 1; i++) {
+                    jexcel.current.up();
+                }
+
+                for (var i=0; i<y-firstVisibleY-1; i++) {
+                    jexcel.current.down();
+                }
+            //PageDown
+            } else if (e.which == 34) {
+                e.preventDefault();
+
+                var y = parseInt(jexcel.current.selectedCell[1]);
+                var displaySize = Math.floor(jexcel.current.content.offsetHeight / jexcel.current.records[jexcel.current.selectedCell[3]][jexcel.current.selectedCell[2]].offsetHeight - 1);
+
+                //find first visible row
+                var firstVisibleY = -1;
+                var tableEl = jexcel.current.content.getBoundingClientRect();
+                for (var i=(y<30 ? 0 : y-30); i<y+30; i++) {
+                    var rowEl = jexcel.current.rows[i].getBoundingClientRect();
+
+                    if (rowEl.top <= tableEl.top ? tableEl.top - rowEl.top <= rowEl.height : rowEl.bottom - tableEl.bottom <= rowEl.height) {
+                        firstVisibleY = i+1;
+                        break;
+                    }
+                }
+
+                //simulate up and down key press (currently best solution because it sets scrollbar properly)
+                for (var i=y-firstVisibleY; i<2*displaySize-1; i++) {
+                    jexcel.current.down();
+                }
+
+                for (var i=0; i<displaySize-(y-firstVisibleY); i++) {
+                    jexcel.current.up();
+                }
             } else {
                 if ((e.ctrlKey || e.metaKey) && ! e.shiftKey) {
                     if (e.which == 65) {
